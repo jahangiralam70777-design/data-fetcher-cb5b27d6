@@ -35,7 +35,8 @@ const settingKeySchema = z.string().min(1).max(64).regex(/^[a-z0-9_-]+$/);
 
 export const publicGetHomepageContent = createServerFn({ method: "GET" })
   .handler(async () => {
-    const { data, error } = await supabaseAdmin
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { data, error } = await (supabase as any)
       .from("homepage_sections")
       .select("section_key,position,visible,published_content,published_at")
       .eq("visible", true)
@@ -53,7 +54,8 @@ export const publicGetHomepageContent = createServerFn({ method: "GET" })
 
 export const publicGetSiteSettings = createServerFn({ method: "GET" })
   .handler(async () => {
-    const { data, error } = await supabaseAdmin
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { data, error } = await (supabase as any)
       .from("site_settings")
       .select("key,published_value,published_at");
     if (error) throw new Error(error.message);
